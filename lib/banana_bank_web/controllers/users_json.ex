@@ -8,6 +8,13 @@ defmodule BananaBankWeb.UsersJSON do
     }
   end
 
+  def get(%{user: user}) do
+    %{
+      message: "Usuário encontrado com sucesso!",
+      data: data(user)
+    }
+  end
+
   defp data(%User{} = user) do
     %{
       id: user.id,
