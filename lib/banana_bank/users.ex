@@ -1,5 +1,4 @@
 defmodule BananaBank.Users do
-
   alias BananaBank.Users.Create
   alias BananaBank.Users.Get
   alias BananaBank.Users.Update

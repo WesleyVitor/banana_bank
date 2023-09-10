@@ -19,6 +19,7 @@ defmodule BananaBankWeb.ErrorJSON do
       status: :not_found
     }
   end
+
   def error(%{changeset: changeset}) do
     %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)}
   end

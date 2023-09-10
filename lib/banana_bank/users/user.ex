@@ -30,11 +30,11 @@ defmodule BananaBank.Users.User do
 
   defp do_validations(changeset, fields) do
     changeset
-      |> validate_required(fields)
-      |> validate_length(:name, min: 3)
-      |> validate_format(:email, ~r/@/)
-      |> validate_length(:cep, is: 8)
-      |> unique_constraint(:email)
+    |> validate_required(fields)
+    |> validate_length(:name, min: 3)
+    |> validate_format(:email, ~r/@/)
+    |> validate_length(:cep, is: 8)
+    |> unique_constraint(:email)
   end
 
   defp add_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
