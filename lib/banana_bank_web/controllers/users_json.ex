@@ -14,6 +14,12 @@ defmodule BananaBankWeb.UsersJSON do
       data: data(user)
     }
   end
+  def update(%{user: user}) do
+    %{
+      message: "Usuário atualizado com sucesso!",
+      data: data(user)
+    }
+  end
 
   defp data(%User{} = user) do
     %{
