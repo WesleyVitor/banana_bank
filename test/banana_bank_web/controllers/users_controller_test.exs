@@ -1,6 +1,9 @@
 defmodule BananaBankWeb.UsersControllerTest do
   use BananaBankWeb.ConnCase
 
+  alias BananaBank.Users.User
+
+  import BananaBank.Factory
   describe "create/2" do
     test "sucessfully creates an user", %{conn: conn} do
       params = %{
@@ -33,6 +36,21 @@ defmodule BananaBankWeb.UsersControllerTest do
         |> post(~p"/api/users/", params)
         |> json_response(400)
       expected_response = %{"errors" => %{"cep" => ["should be 8 character(s)"], "name" => ["can't be blank"]}}
+      assert response == expected_response
+    end
+  end
+
+  describe "delete/2" do
+    test "sucessfully deletes an user", %{conn: conn} do
+      %User{id: id} = insert(:user, password: "1234")
+
+      response =
+        conn
+        |> delete(~p"/api/users/#{id}")
+        |> json_response(200)
+
+      expected_response =%{"message" => "Usuário John Doe foi deletado com sucesso!"}
+
       assert response == expected_response
     end
   end
