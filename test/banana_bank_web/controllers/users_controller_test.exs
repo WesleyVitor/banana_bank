@@ -20,5 +20,20 @@ defmodule BananaBankWeb.UsersControllerTest do
                "message" => "Usuário criado com sucesso!"
              } = response
     end
+    test "when there are invalid params, returns an error", %{conn: conn} do
+      params = %{
+        name: nil,
+        email: "john@gmail.com",
+        password: "123456",
+        cep: "123"
+      }
+
+      response =
+        conn
+        |> post(~p"/api/users/", params)
+        |> json_response(400)
+      expected_response = %{"errors" => %{"cep" => ["should be 8 character(s)"], "name" => ["can't be blank"]}}
+      assert response == expected_response
+    end
   end
 end
