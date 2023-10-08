@@ -1,11 +1,11 @@
 defmodule BananaBank.ViaCep.Client do
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, "https://viacep.com.br/ws"
+  @default_url "https://viacep.com.br/ws"
   plug Tesla.Middleware.JSON
 
-  def call(cep) do
-    "/#{cep}/json"
+  def call(url \\ @default_url, cep) do
+    "#{url}/#{cep}/json"
     |> get()
     |> handle_response()
   end
@@ -19,7 +19,8 @@ defmodule BananaBank.ViaCep.Client do
   defp handle_response({:ok, %Tesla.Env{status: 400}}) do
     {:error, :bad_request}
   end
-  defp handle_response({:error,_}) do
+  defp handle_response({:error,_reason}) do
+
     {:error, :internal_server_error}
   end
 end

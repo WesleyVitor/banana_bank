@@ -44,6 +44,7 @@ defmodule BananaBank.MixProject do
       {:argon2_elixir, "~> 3.0"},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:tesla, "~> 1.4"},
+      {:bypass, "~> 2.1", only: :test},
     ]
   end
 
