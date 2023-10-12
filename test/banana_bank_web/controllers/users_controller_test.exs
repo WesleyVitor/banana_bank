@@ -4,6 +4,11 @@ defmodule BananaBankWeb.UsersControllerTest do
   alias BananaBank.Users.User
 
   import BananaBank.Factory
+
+  import Mox
+
+  setup :verify_on_exit!
+
   describe "create/2" do
     test "sucessfully creates an user", %{conn: conn} do
       params = %{
@@ -13,10 +18,25 @@ defmodule BananaBankWeb.UsersControllerTest do
         cep: "12345678"
       }
 
+      body = %{
+        "bairro" => "",
+        "cep" => "29560-000",
+        "complemento" => "",
+        "ddd" => "28",
+        "gia" => "",
+        "ibge" => "3202306",
+        "localidade" => "Guaçuí",
+        "logradouro" => "",
+        "siafi" => "5645",
+        "uf" => "ES"
+      }
+      expect(BananaBank.ViaCep.ClientMock, :call, fn _cep->
+        {:ok,body}
+      end)
       response =
         conn
-        |> post(~p"/api/users/", params)
-        |> json_response(201)
+        |> post(~p"/api/users", params)
+        |> json_response(:created)
 
       assert %{
                "data" => %{"cep" => "12345678", "email" => "john@gmail.com", "id" => _id, "name" => "John Doe"},
@@ -30,7 +50,9 @@ defmodule BananaBankWeb.UsersControllerTest do
         password: "123456",
         cep: "123"
       }
-
+      expect(BananaBank.ViaCep.ClientMock, :call, fn _cep->
+        {:ok,""}
+      end)
       response =
         conn
         |> post(~p"/api/users/", params)
