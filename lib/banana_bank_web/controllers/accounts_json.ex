@@ -3,7 +3,7 @@ defmodule BananaBankWeb.AccountsJSON do
 
   def create(%{account: account}) do
     %{
-      message: "Usuário criado com sucesso!",
+      message: "Conta criada com sucesso!",
       data: data(account)
     }
   end
@@ -12,6 +12,7 @@ defmodule BananaBankWeb.AccountsJSON do
     %{
       id: account.id,
       balance: account.balance,
+      user_id: account.user_id
     }
   end
 end
