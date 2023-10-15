@@ -13,4 +13,16 @@ defmodule BananaBankWeb.AccountsController do
       |> render(:create, account: account)
     end
   end
+  def transaction(conn, %{
+    "from_account" => from_account,
+    "to_account" => to_account,
+    "value" => value
+    }) do
+
+    with {:ok, transaction} <- Accounts.transaction(from_account, to_account, value) do
+      conn
+      |> put_status(:ok)
+      |> render(:transaction, transaction: transaction)
+    end
+  end
 end

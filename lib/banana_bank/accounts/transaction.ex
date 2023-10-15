@@ -4,17 +4,22 @@ defmodule BananaBank.Accounts.Transaction do
   alias Ecto.Multi
 
   def call(from_account_id, to_account_id, value) do
+
     with %Account{} = from_account <- Repo.get(Account, from_account_id),
-        %Account{} = to_account <- Repo.get(Account, to_account_id) do
+        %Account{} = to_account <- Repo.get(Account, to_account_id),
+        {:ok, value} <- Decimal.cast(value) do
 
       Multi.new()
       |> changes(from_account, to_account, value)
       |> Repo.transaction()
-
+      |> handle_transaction()
     else
       nil -> {:error, :not_found}
+      :error -> {:error, "Invalid_value"}
     end
   end
+
+  def call(_), do: "Invalid_value"
 
   defp changes(multi, from_account, to_account, value) do
     multi
@@ -33,4 +38,7 @@ defmodule BananaBank.Accounts.Transaction do
     changeset = Account.changeset(to_account, %{balance: new_balance})
     Multi.update(multi, :deposit, changeset)
   end
+
+  defp handle_transaction({:ok, _result} = result), do: result
+  defp handle_transaction({:error, _op, changes, _}), do: {:error, changes}
 end
