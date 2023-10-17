@@ -19,6 +19,12 @@ defmodule BananaBankWeb.ErrorJSON do
       status: :not_found
     }
   end
+  def error(%{status: :unauthorized}) do
+    %{
+      message: "Usuário não autenticado!",
+      status: :unauthorized
+    }
+  end
 
   def error(%{status: :bad_request}) do
     %{
